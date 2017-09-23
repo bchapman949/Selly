@@ -1,0 +1,69 @@
+﻿@model Selly.NMS.Web.ViewModels.PolicyRule.PolicyRuleVM
+@{
+    ViewData["Title"] = "View Policy Rule";
+}
+
+<div class="bg-primary panel-body"><h4>Create Policy Rule</h4></div>
+
+<div asp-validation-summary=" All" class="text-danger"></div>
+
+<form asp-action="View" asp-route-id="@Url.ActionContext.RouteData.Values["id"]" method="post">
+    <!-- Name -->
+    <div class="form-group">
+        <label>Name</label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+
+    <!-- Protocols -->
+    <div class="form-group">
+        <label>Protocols</label>
+        <select asp-for="Protocol">
+            <option value="TCP">TCP</option>
+            <option value="UDP">UDP</option>
+            <option value="GRE">GRE</option>
+            <option value="IPv6">IPv6</option>
+            <option value="IGMP">IGMP</option>
+            <option value="ANY">ANY</option>
+        </select>
+    </div>
+
+    <!-- Action -->
+    <div class="form-group">
+        <label>Action</label>
+        <select asp-for="Action">
+            <option value="Allow">Allow</option>
+            <option value="Block">Block</option>
+        </select>
+    </div>
+
+    <!-- Direction -->
+    <div class="form-group">
+        <label>Direction</label>
+        <select asp-for="Direction">
+            <option value="In">In</option>
+            <option value="Out">Out</option>
+        </select>
+    </div>
+
+    <!-- Address-->
+    <div>
+        <label>Remote Address</label>
+        <input asp-for="RemoteAddress" class="form-control" />
+    </div>
+
+    <!-- Ports -->
+    <div>
+        <label>Ports</label>
+        <input asp-for="LocalPort" type="text" class="form-control" />
+        <ul>
+            <li>Inbound rules: Local port</li>
+            <li>Outbound rules: Remote / target port</li>
+        </ul>
+    </div>
+
+    <div class="btn-group" style="margin:20px">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="ConfirmDeletion" asp-route-id="@Url.ActionContext.RouteData.Values["id"]" asp-route-ruleId="@Model.Id" class="btn btn-danger">Delete</a>
+        <a asp-action="Index" asp-route-id="@Url.ActionContext.RouteData.Values["id"]" class="btn btn-default">Cancel</a>
+    </div>
+</form>

@@ -1,0 +1,16 @@
+﻿@model Rule
+@{
+    ViewData["Title"] = "Rules";
+}
+
+<div class="bg-danger panel-body"><h4>Delete Rule</h4></div>
+<div asp-validation-summary="All" class="text-danger"></div>
+
+<form asp-action="Delete" asp-route-id="@Url.ActionContext.RouteData.Values["id"]" asp-route-ruleId="@Url.ActionContext.RouteData.Values["ruleId"]" method="post">
+    <p>This will delete the rule. This action cannot be reversed.</p>
+
+    <div class="btn-group" style="margin:20px">
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a asp-action="Index" class="btn btn-default">Cancel</a>
+    </div>
+</form>

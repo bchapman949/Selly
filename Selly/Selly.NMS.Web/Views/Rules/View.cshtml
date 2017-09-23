@@ -1,0 +1,118 @@
+﻿@model Rule
+@{
+    ViewData["Title"] = "Rules";
+}
+
+<div class="bg-primary panel-body"><h4>View Rule</h4></div>
+<div asp-validation-summary="All" class="text-danger"></div>
+
+<form asp-action="View" method="post">
+
+    <!-- Name -->
+    <div class="form-group">
+        <label>Name</label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+
+    <!-- Protocols -->
+    <div class="form-group">
+        <label>Protocols</label>
+        <select asp-for="Protocol">
+            <option value="TCP">TCP</option>
+            <option value="UDP">UDP</option>
+            <option value="GRE">GRE</option>
+            <option value="IPv6">IPv6</option>
+            <option value="IGMP">IGMP</option>
+            <option value="ANY">ANY</option>
+        </select>
+    </div>
+
+    <!-- Action -->
+    <div class="form-group">
+        <label>Action</label>
+        <select asp-for="Action">
+            <option value="Allow">Allow</option>
+            <option value="Block">Block</option>
+        </select>
+    </div>
+
+    <!-- Direction -->
+    <div class="form-group">
+        <label>Direction</label>
+        <select asp-for="Direction">
+            <option value="In">In</option>
+            <option value="Out">Out</option>
+        </select>
+    </div>
+
+    <!-- Address-->
+    <div>
+        <label>Remote Address</label>
+        <input asp-for="RemoteAddress" class="form-control" />
+    </div>
+
+    <!-- Ports -->
+    <div>
+        <label>Ports</label>
+        <input asp-for="LocalPort" type="text" class="form-control" />
+        <ul>
+            <li>Inbound rules: Local port</li>
+            <li>Outbound rules: Remote / target port</li>
+        </ul>
+    </div>
+
+    <div class="btn-group" style="margin:20px">
+
+    @if (Model.Protocol != Protocol.Other)
+    {
+        <button type="submit" class="btn btn-primary">Save</button>
+    }        
+        <a asp-action="ConfirmDeletion" class="btn btn-danger">Delete</a>
+        <a asp-action="Index" class="btn btn-default">Cancel</a>
+    </div>
+</form>
+
+<h3>Statistics</h3>
+
+<table class="table table-condensed table-bordered">
+    <tr>
+        <td>Number of Times Fired</td><td>@ViewData["TimesFired"]</td>
+    </tr>
+    <tr>
+        <td>Last Fired On</td><td>@ViewData["LastFired"]</td>
+    </tr>
+    <tr>
+        <td>Most Triggered By</td><td>@ViewData["MostTriggeredBy"]</td>
+    </tr>
+</table>
+
+<h4>Last 24 Hours</h4>
+
+<div id="top_x_div" style="height: 200px;"></div>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+
+    google.charts.load('current', { 'packages': ['bar'] });
+    google.charts.setOnLoadCallback(drawStuff);
+
+    function drawStuff() {
+        var data = new google.visualization.arrayToDataTable(@Html.Raw(ViewData["Last24Hours"]));
+
+        var options = {
+
+            legend: { position: 'none' },
+            axes: {
+                x: {
+                    0: { side: 'bottom', label: 'Time' } // Top x-axis.
+                }
+            },
+            bar: { groupWidth: "90%" }
+        };
+
+        var chart = new google.charts.Bar(document.getElementById('top_x_div'));
+
+        // Convert the Classic options to Material options.
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+      };
+</script>

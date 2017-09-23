@@ -1,0 +1,128 @@
+﻿@model Selly.NMS.Web.ViewModels.Device.ViewVM
+@{
+    ViewData["Title"] = "Devices";
+}
+
+<div class="bg-primary panel-body"><h4>@Model.Device.Name</h4></div>
+
+<form asp-action="Delete" asp-route-id="@Model.Device.Id" method="post">
+    <div class="btn-group" style="margin:20px">
+        <div class="btn-group">
+
+            <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Device.Id">Edit</a>
+            <button class="btn btn-danger" type="submit">Delete</button>
+            @if (Model.Online)
+            {
+                <a class="btn btn-primary" asp-controller="Rules" asp-action="Index" asp-route-id="@Model.Device.Id">Rules</a>
+            }
+            <a class="btn btn-primary" asp-controller="Events" asp-action="Index" asp-route-id="@Model.Device.Id">Events</a>
+            <a asp-action="Enable" asp-route-id="@Model.Device.Id" class="btn btn-success">Enable Firewall</a>
+            <a asp-action="Disable" asp-route-id="@Model.Device.Id" class="btn btn-danger">Disable Firewall</a>
+        </div>
+    </div>
+</form>
+
+
+
+<h4>Overview</h4>
+
+<table class="table table-condensed" style="table-layout:fixed">
+    <tr><td>Address:</td><td>@Model.Device.Address</td></tr>
+    <tr>
+        <td>Status:</td>
+        @if(Model.Online)
+        {
+            <td>Online</td>
+        }
+        else
+        {
+            <td>Offline</td>
+        }
+    </tr>
+    @if (Model.Online)
+    {
+    <tr>
+        <td>Firewall Status:</td>
+        @if (Model.FirewallEnabled)
+        {
+            <td>Enabled</td>
+        }
+        else
+        {
+            <td style="color:red">DISABLED</td>
+        }
+    
+    </tr>
+    }
+</table>
+
+@if(Model.Online)
+{
+    <h4>Recent Events</h4>
+
+    <table class="table">
+        <tr><th>Date &amp; Time</th><th>Filter Name</th><th>Remote Address</th><th>Remote Port</th><th>Local Address</th><th>Local Port</th></tr>
+
+    @if (Model.Events.Count() == 0)
+    {
+        <tr><td colspan="7" class="text-center">No Events</td></tr>
+    }
+    else
+    {
+        @foreach (var e in Model.Events)
+        {
+            <tr>
+                <td>@e.Time</td>
+                
+                @if (string.IsNullOrWhiteSpace(e.FilterName))
+                {
+                    <td>N/A</td>
+                }
+                else
+                {
+                    <td><a asp-controller="Events" asp-action="View" asp-route-id="@e.Id">@e.FilterName</a></td>
+                }
+                
+                <td><a href="http://whois.domaintools.com/@e.RemoteAddress" target="_blank">@e.RemoteAddress</a></td>
+                <td>@e.RemotePort</td>
+                <td>@e.LocalAddress</td>
+                <td>@e.LocalPort</td>
+            </tr>
+        }
+    }
+    </table>
+
+    <h4>Number of Violations in the Last 24 Hours</h4>
+
+    <div id="top_x_div" style="height: 200px;"></div>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+
+        google.charts.load('current', { 'packages': ['bar'] });
+        google.charts.setOnLoadCallback(drawStuff);
+
+        function drawStuff() {
+            var data = new google.visualization.arrayToDataTable(@Html.Raw(ViewData["Last24Hours"]));
+
+            var options = {
+            
+                legend: { position: 'none' },
+                axes: {
+                    x: {
+                        0: { side: 'bottom', label: 'Time' } // Top x-axis.
+                    },
+                    y: {
+                        0: { minValue: 0 }
+                    }
+                },
+                bar: { groupWidth: "90%" }
+            };
+
+            var chart = new google.charts.Bar(document.getElementById('top_x_div'));
+
+            // Convert the Classic options to Material options.
+            chart.draw(data, google.charts.Bar.convertOptions(options));
+          };
+    </script>
+}

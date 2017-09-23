@@ -1,0 +1,65 @@
+﻿@model Selly.NMS.Web.ViewModels.Rules.IndexVM
+@{
+    ViewData["Title"] = "Rules";
+}
+
+<style>
+    td {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+</style>
+
+<div class="bg-primary panel-body"><h2>View Rules : @Model.Device.Name</h2></div>
+
+<div class="btn-group" style="margin:20px">
+    <a asp-action="Create" asp-route-id="@Model.Device.Id" class="btn btn-sm btn-primary">Create Rule</a>
+</div>
+
+<table class="table table-condensed table-bordered" style="table-layout:fixed">
+    <tr><th>Name</th><th>Action</th><th>Protocol</th><th>Direction</th><th>Remote Address</th><th>Remote Port</th><th>Local Address</th><th>Local Port</th></tr>
+
+    @if (Model.Rules.Count() == 0)
+    {
+        <tr><td colspan="5" class="text-center">No Rules</td></tr>
+    }
+    else
+    {
+        foreach (IRule rule in Model.Rules)
+        {
+            <tr>
+                <td><a asp-action="View" asp-route-name="@rule.Name">@rule.Name</a></td>
+                <td>@rule.Action</td>
+                <td>@rule.Protocol</td>
+                <td>@Enum.GetName(typeof(Direction), rule.Direction)</td>
+                <td>@rule.RemoteAddress</td>
+                @if (rule.RemotePort == null)
+                {
+                    <td>Unsupported</td>
+                }
+                else if (rule.RemotePort == Rule.ANY_PORT)
+                {
+                    <td>ANY</td>
+                }
+                else
+                {
+                    <td>@rule.RemotePort</td>
+                }
+                <td>@rule.LocalAddress</td>
+                @if(rule.LocalPort == null)
+                {
+                    <td>Unsupported</td>
+                }
+                else if(rule.LocalPort == Rule.ANY_PORT)
+                {
+                    <td>ANY</td>
+                }
+                else
+                {
+                    <td>@rule.LocalPort</td>
+                }
+            </tr>
+        }
+    }
+</table>

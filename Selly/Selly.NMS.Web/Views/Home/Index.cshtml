@@ -1,0 +1,73 @@
+﻿@model IEnumerable<PacketDroppedEvent>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="bg-primary panel-body"><h2>Dashboard</h2></div>
+
+<h3>Latest Events</h3>
+
+<table class="table table-condensed">
+    <tr><th>Date &amp; Time</th><th>Machine</th><th>Filter Name</th><th>Remote Address</th><th>Remote Port</th><th>Local Address</th><th>Local Port</th></tr>
+
+    @if (Model.Count() == 0)
+    {
+        <tr><td colspan="7" class="text-center">No Events</td></tr>
+    }
+    else
+    {
+        @foreach (var ev in Model)
+        {
+            <tr>
+                <td>@ev.Time.ToLocalTime()</td>
+                <td><a asp-controller="Devices" asp-action="View" asp-route-id="@ev.DeviceId">@ev?.Device?.Name</a></td>
+                @if (string.IsNullOrWhiteSpace(ev.FilterName))
+                {
+                    <td>N/A</td>
+                }
+                else
+                {
+                    <td><a asp-controller="Events" asp-action="View" asp-route-id="@ev.Id">@ev.FilterName</a></td>
+                }
+                <td><a href="http://whois.domaintools.com/@ev.RemoteAddress" target="_blank">@ev.RemoteAddress</a></td>
+                <td>@ev.RemotePort</td>
+                <td>@ev.LocalAddress</td>
+                <td>@ev.LocalPort</td>
+            </tr>
+        }
+    }
+</table>
+
+<h3>Statistics</h3>
+
+<table>
+    <tr>
+        <th>Violations by Port Number</th>
+        <th>Top Remote Addresses</th>
+        
+    </tr>
+    <tr>
+        <td><div id="piechart" style="width: 450px; height: 300px;"></div></td>
+        <td>
+            <ol>
+                @foreach(var pair in (IDictionary<string, int>)ViewData["TopAddresses"])
+                {
+                    <li>@pair.Key (Seen @pair.Value times)</li>
+                }
+            </ol>
+        </td>
+    </tr>
+</table>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+          var data = google.visualization.arrayToDataTable(@Html.Raw(ViewData["TopPorts"]));
+          var options = { chartArea: { width: '80%', height: '80%' }, legend: { position: 'right' }};
+          var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+          chart.draw(data, options);
+      }
+</script>

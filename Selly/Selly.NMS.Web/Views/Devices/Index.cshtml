@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Device>
+@{
+    ViewData["Title"] = "Devices";
+}
+
+<style>
+    td {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+</style>
+
+<div class="bg-primary panel-body"><h2>Devices</h2></div>
+
+<div class="btn-group" style="margin:20px">
+    <a class="btn btn-primary" asp-action="Create">Add New Device</a>
+</div>
+
+<table class="table table-condensed table-bordered" style="table-layout:fixed">
+    <tr><th>Name</th><th>Address</th></tr>
+    @if (Model.Count() == 0)
+    {
+        <tr><td colspan="2" class="text-center">No Devices</td></tr>
+    }
+    else
+    {
+        foreach (Device device in Model)
+        {
+            <tr>
+                <td><a asp-action="View" asp-route-id="@device.Id">@device.Name</a></td>
+                <td>@device.Address</td>
+            </tr>
+        }
+    }
+</table>

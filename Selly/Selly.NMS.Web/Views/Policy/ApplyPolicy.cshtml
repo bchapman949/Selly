@@ -1,0 +1,26 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+Specify Machines
+
+<form asp-action="ApplyTo" asp-route-id="@Url.ActionContext.RouteData.Values["id"]" method="post">
+
+    <!-- Devices -->
+    <div>
+        <label>Devices</label>
+        @foreach (Device device in ViewBag.Devices)
+        {
+            <div class="checkbox">
+                <label><input type="checkbox" name="device" value="@device.Id">@device.Name (@device.Address)</label>
+            </div>
+        }
+    </div>
+
+    <div class="btn-group" style="margin:20px">
+        <button type="submit" class="btn btn-primary">Apply</button>
+        <a asp-action="Index" class="btn btn-default">Cancel</a>
+    </div>
+</form>

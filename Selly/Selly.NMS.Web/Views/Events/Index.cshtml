@@ -1,0 +1,45 @@
+﻿@model Selly.NMS.Web.ViewModels.Events.IndexVM
+@{
+    ViewData["Title"] = "Rules";
+}
+
+<style>
+    td {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+</style>
+
+<div class="bg-primary panel-body"><h2>View Events : @Model.Device.Name</h2></div>
+
+<table class="table table-condensed table-bordered" style="table-layout:fixed">
+    <tr><th>Date &amp; Time</th><th>Filter Name</th><th>Remote Address</th><th>Remote Port</th><th>Local Address</th><th>Local Port</th></tr>
+
+    @if (Model.Events.Count() == 0)
+    {
+        <tr><td colspan="3" class="text-center">No Events</td></tr>
+    }
+    else
+    {
+        @foreach (var ev in Model.Events)
+        {
+            <tr>
+                <td>@ev.Time</td>
+
+                @if (string.IsNullOrEmpty(ev.FilterName))
+                {
+                    <td><a asp-controller="Events" asp-action="View" asp-route-id="@ev.Id">N/A</a></td>
+                }
+                else
+                {
+                <td><a asp-controller="Events" asp-action="View" asp-route-id="@ev.Id">@ev.FilterName</a></td>
+                }
+                <td><a href="http://whois.domaintools.com/@ev.RemoteAddress" target="_blank">@ev.RemoteAddress</a></td>
+                <td>@ev.RemotePort</td>
+                <td>@ev.LocalAddress</td>
+                <td>@ev.LocalPort</td>
+            </tr>
+        }
+    }
+</table>

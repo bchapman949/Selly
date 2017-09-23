@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="6.1.1" />
+    <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
+    <PackageReference Include="System.Xml.XmlDocument" Version="4.3.0" />
+    <ProjectReference Include="..\Selly.Agent.API\Selly.Agent.API.csproj" />
+    <ProjectReference Include="..\Selly.Agent.Generic.Models\Selly.Agent.Generic.Models.csproj" />
+    <ProjectReference Include="..\Selly.Agent.Linux.FirewallAPI\Selly.Agent.Linux.FirewallAPI.csproj" />
+    <ProjectReference Include="..\Selly.Agent.Linux.Models\Selly.Agent.Linux.Models.csproj" />
+    <ProjectReference Include="..\Selly.NMS.API.DTO\Selly.NMS.API.DTO.csproj" />
+    <ProjectReference Include="..\SharpSnmpLib.NetStandard\SharpSnmpLib.NetStandard.csproj" />
+
+    
+    <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
+    <PackageReference Include="System.Net.NetworkInformation" Version="4.3.0" />
+    <PackageReference Include="System.Net.Sockets" Version="4.3.0" />
+    <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
+    <PackageReference Include="System.Threading.Thread" Version="4.3.0" />
+  
+  </ItemGroup>
+
+</Project>

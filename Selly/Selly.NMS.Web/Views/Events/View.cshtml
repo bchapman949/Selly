@@ -1,0 +1,37 @@
+﻿@model PacketDroppedEvent
+@{
+    ViewData["Title"] = "Event";
+}
+
+<div class="bg-primary panel-body"><h4>View Event</h4></div>
+
+<h4>Last 24 Hours</h4>
+
+<div id="top_x_div" style="height: 200px;"></div>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+
+    google.charts.load('current', { 'packages': ['bar'] });
+    google.charts.setOnLoadCallback(drawStuff);
+
+    function drawStuff() {
+        var data = new google.visualization.arrayToDataTable(@Html.Raw(ViewData["Last24Hours"]));
+
+        var options = {
+
+            legend: { position: 'none' },
+            axes: {
+                x: {
+                    0: { side: 'bottom', label: 'Time' } // Top x-axis.
+                }
+            },
+            bar: { groupWidth: "90%" }
+        };
+
+        var chart = new google.charts.Bar(document.getElementById('top_x_div'));
+
+        // Convert the Classic options to Material options.
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+      };
+</script>

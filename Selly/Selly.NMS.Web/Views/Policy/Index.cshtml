@@ -1,0 +1,37 @@
+﻿@model IEnumerable<Policy>
+@{
+    ViewData["Title"] = "Policy";
+}
+
+<style>
+    td {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+</style>
+
+<div class="bg-primary panel-body"><h2>Policies</h2></div>
+
+<div class="btn-group" style="margin:20px">
+    <a asp-action="CrossDeviceRule" asp-route-id="" class="btn btn-primary">Create Cross Device Rule</a>
+    <a asp-action="Create" asp-route-id="" class="btn btn-primary">Create New Policy</a>
+</div>
+
+<table class="table table-condensed table-bordered" style="table-layout:fixed">
+    <tr><th>Name</th></tr>
+
+    @if (Model.Count() == 0)
+    {
+        <tr><td colspan="1" class="text-center">No Policies</td></tr>
+    }
+    else
+    {
+        foreach (var policy in Model)
+        {
+            <tr>
+                <td><a asp-controller="PolicyRules" asp-action="Index" asp-route-id="@policy.Id">@policy.Name</a></td>
+            </tr>
+        }
+    }
+</table>

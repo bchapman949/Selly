@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.4</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Selly.Agent.Generic.Models\Selly.Agent.Generic.Models.csproj" />
+  </ItemGroup>
+
+</Project>
